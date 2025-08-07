@@ -1,4 +1,4 @@
-import 'package:yam_snap/data/meal_model.dart';
+part of 'meal_cubit.dart';
 
 abstract class MealState {
   const MealState();

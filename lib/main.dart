@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:yam_snap/data/meal_model.dart';
 import 'package:yam_snap/data/meal_data.dart';
+import 'package:yam_snap/domain/camera_cubit.dart';
 import 'package:yam_snap/domain/date_cubit.dart';
 import 'package:yam_snap/domain/meal_cubit.dart';
 import 'package:yam_snap/domain/meal_form_cubit.dart';
@@ -20,6 +21,7 @@ void main() async {
         BlocProvider(create: (_) => SelectedDateCubit()),
         BlocProvider(create: (_) => MealCubit()),
         BlocProvider(create: (_) => MealFormCubit()),
+        BlocProvider(create: (_) => CameraCubit()),
       ],
       child: const MyApp(),
     ),

@@ -1,3 +1,5 @@
+part of 'meal_form_cubit.dart';
+
 class MealFormState {
   final String title;
   final String calories;
