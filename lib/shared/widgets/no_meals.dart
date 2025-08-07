@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NoMeals extends StatelessWidget {
-  const NoMeals();
+  const NoMeals({super.key});
 
   @override
   Widget build(BuildContext context) {

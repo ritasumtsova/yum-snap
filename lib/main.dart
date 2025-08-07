@@ -5,6 +5,7 @@ import 'package:yam_snap/data/meal_model.dart';
 import 'package:yam_snap/data/meal_data.dart';
 import 'package:yam_snap/domain/date_cubit.dart';
 import 'package:yam_snap/domain/meal_cubit.dart';
+import 'package:yam_snap/domain/meal_form_cubit.dart';
 import 'package:yam_snap/presentation/home_page.dart';
 
 void main() async {
@@ -18,6 +19,7 @@ void main() async {
       providers: [
         BlocProvider(create: (_) => SelectedDateCubit()),
         BlocProvider(create: (_) => MealCubit()),
+        BlocProvider(create: (_) => MealFormCubit()),
       ],
       child: const MyApp(),
     ),
