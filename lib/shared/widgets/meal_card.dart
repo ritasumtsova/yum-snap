@@ -11,6 +11,7 @@ class MealCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const defaultPaddings = EdgeInsets.symmetric(horizontal: 16, vertical: 4);
+    final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: defaultPaddings,
       child: Card(
@@ -32,18 +33,15 @@ class MealCard extends StatelessWidget {
                 children: [
                   Text(
                     meal.title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     '${meal.calories} calories',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: textTheme.bodyMedium,
                   ),
-                  Text(
-                    meal.ingredients,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  Text(meal.ingredients, style: textTheme.bodyMedium),
                 ],
               ),
             ],

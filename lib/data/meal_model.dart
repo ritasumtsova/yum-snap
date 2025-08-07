@@ -4,9 +4,6 @@ part 'meal_model.g.dart';
 
 @HiveType(typeId: 0)
 class Meal extends HiveObject {
-  @HiveField(0)
-  final String id;
-
   @HiveField(1)
   final String title;
 
@@ -23,7 +20,6 @@ class Meal extends HiveObject {
   final String ingredients;
 
   Meal({
-    required this.id,
     required this.title,
     required this.calories,
     required this.date,
@@ -40,7 +36,6 @@ class Meal extends HiveObject {
     String? ingredients,
   }) {
     return Meal(
-      id: id ?? this.id,
       title: title ?? this.title,
       calories: calories ?? this.calories,
       date: date ?? this.date,
@@ -51,7 +46,6 @@ class Meal extends HiveObject {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'title': title,
       'calories': calories,
       'date': date.toIso8601String(),
@@ -62,7 +56,6 @@ class Meal extends HiveObject {
 
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
-      id: json['id'] as String,
       title: json['title'] as String,
       calories: json['calories'] as int,
       date: DateTime.parse(json['date'] as String),
@@ -73,14 +66,13 @@ class Meal extends HiveObject {
 
   @override
   String toString() {
-    return 'Meal(id: $id, title: $title, calories: $calories, date: $date, imagePath: $imagePath, ingredients: $ingredients)';
+    return 'Meal(title: $title, calories: $calories, date: $date, imagePath: $imagePath, ingredients: $ingredients)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is Meal &&
-        other.id == id &&
         other.title == title &&
         other.calories == calories &&
         other.date == date &&
@@ -90,8 +82,7 @@ class Meal extends HiveObject {
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        title.hashCode ^
+    return title.hashCode ^
         calories.hashCode ^
         date.hashCode ^
         imagePath.hashCode ^

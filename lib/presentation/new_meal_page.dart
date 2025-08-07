@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:yam_snap/domain/meal_data.dart';
+import 'package:yam_snap/data/meal_model.dart';
+import 'package:yam_snap/domain/meal_cubit.dart';
 import 'package:yam_snap/presentation/home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddNewMealPage extends StatefulWidget {
   const AddNewMealPage({super.key, required this.imagePath});
@@ -27,45 +29,15 @@ class _AddNewMealPageState extends State<AddNewMealPage> {
 
   @override
   void dispose() {
+    _formKey.currentState?.reset();
     _titleController.dispose();
     _caloriesController.dispose();
     _ingredientsController.dispose();
     super.dispose();
   }
 
-  Future<void> _saveMealAndRedirect() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final meal = await MealDataService.addMealWithId(
-          title: _titleController.text,
-          calories: int.parse(_caloriesController.text),
-          date: _today,
-          imagePath: widget.imagePath,
-          ingredients: _ingredientsController.text,
-        );
-
-        if (meal.isInBox && mounted) {
-          _clearForm();
-
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const HomePage()));
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error saving meal: $e'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      }
-    }
-  }
-
   void _clearForm() {
-    _formKey.currentState!.reset();
+    _formKey.currentState?.reset();
     _titleController.clear();
     _caloriesController.clear();
     _ingredientsController.clear();
@@ -158,7 +130,42 @@ class _AddNewMealPageState extends State<AddNewMealPage> {
                   ),
                   const SizedBox(height: 24),
                   FilledButton(
-                    onPressed: _saveMealAndRedirect,
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          final mealCubit = context.read<MealCubit>();
+
+                          final meal = Meal(
+                            title: _titleController.text,
+                            calories: int.parse(_caloriesController.text),
+                            date: _today,
+                            imagePath: widget.imagePath,
+                            ingredients: _ingredientsController.text,
+                          );
+
+                          mealCubit.addMeal(meal);
+
+                          if (meal.isInBox && mounted) {
+                            _clearForm();
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => const HomePage(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Error saving meal: $e'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        }
+                      }
+                    },
+
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(Colors.black),
                       shape: WidgetStatePropertyAll(
