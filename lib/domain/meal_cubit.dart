@@ -1,7 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yam_snap/data/meal_model.dart';
 import 'package:yam_snap/data/meal_data.dart';
-import 'meal_state.dart';
+
+part 'meal_state.dart';
 
 class MealCubit extends Cubit<MealState> {
   MealCubit() : super(MealInitial());

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yam_snap/domain/meal_form_state.dart';
+
+part 'meal_form_state.dart';
 
 class MealFormCubit extends Cubit<MealFormState> {
   MealFormCubit() : super(MealFormState());
