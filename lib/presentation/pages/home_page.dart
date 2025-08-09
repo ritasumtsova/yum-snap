@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:yam_snap/presentation/cubits/date/date_cubit.dart';
 import 'package:yam_snap/presentation/cubits/meals/meal_cubit.dart';
 import 'package:yam_snap/presentation/pages/camera_page.dart';
+import 'package:yam_snap/shared/utils/camera_permission_handler.dart';
 import 'package:yam_snap/shared/widgets/meal_card.dart';
 import 'package:yam_snap/shared/widgets/no_meals.dart';
 
@@ -82,11 +83,18 @@ class _HomePageState extends State<HomePage> {
             floatingActionButton: FloatingActionButton(
               shape: const CircleBorder(),
               backgroundColor: Colors.black,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const CameraPage()),
-                );
+              onPressed: () async {
+                final hasPermission =
+                    await CameraPermissionHandler.checkAndRequestPermission(
+                      context,
+                    );
+
+                if (hasPermission == true && mounted) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CameraPage()),
+                  );
+                }
               },
               tooltip: 'Add new meal',
               child: const Icon(Icons.add, color: Colors.white),

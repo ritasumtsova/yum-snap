@@ -65,6 +65,11 @@ class CameraCubit extends Cubit<CameraState> {
     }
   }
 
+  void disposeCamera() {
+    _controller?.dispose();
+    _controller = null;
+  }
+
   @override
   Future<void> close() {
     _controller?.dispose();

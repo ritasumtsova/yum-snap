@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yam_snap/presentation/cubits/camera/camera_cubit.dart';
+import 'package:yam_snap/presentation/pages/home_page.dart';
 import 'package:yam_snap/presentation/pages/new_meal_page.dart';
 
 class CameraPage extends StatefulWidget {
@@ -12,10 +13,18 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
+  late CameraCubit _cameraCubit;
   @override
   void initState() {
     super.initState();
-    context.read<CameraCubit>().initializeCamera();
+    _cameraCubit = context.read<CameraCubit>();
+    _cameraCubit.initializeCamera();
+  }
+
+  @override
+  void dispose() {
+    _cameraCubit.disposeCamera();
+    super.dispose();
   }
 
   @override
