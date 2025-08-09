@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:yam_snap/domain/date_cubit.dart';
-import 'package:yam_snap/domain/meal_cubit.dart';
-import 'package:yam_snap/presentation/camera_page.dart';
+import 'package:yam_snap/presentation/cubits/date/date_cubit.dart';
+import 'package:yam_snap/presentation/cubits/meals/meal_cubit.dart';
+import 'package:yam_snap/presentation/pages/camera_page.dart';
 import 'package:yam_snap/shared/widgets/meal_card.dart';
 import 'package:yam_snap/shared/widgets/no_meals.dart';
 
@@ -51,9 +51,12 @@ class _HomePageState extends State<HomePage> {
             body: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onHorizontalDragEnd: (details) {
-                details.primaryVelocity! > 0
-                    ? selectedDateCubit.getPrevDay()
-                    : selectedDateCubit.getNextDay();
+                if (details.primaryVelocity! > 0) {
+                  selectedDateCubit.getPrevDay();
+                }
+                if (details.primaryVelocity! < 0) {
+                  selectedDateCubit.getNextDay();
+                }
               },
               child: BlocBuilder<MealCubit, MealState>(
                 builder: (context, state) {

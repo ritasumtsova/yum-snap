@@ -5,10 +5,10 @@ class NoMeals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Icon(Icons.restaurant, size: 64, color: Colors.grey),
           SizedBox(height: 16),
           Text('No meals', style: TextStyle(fontSize: 18, color: Colors.grey)),

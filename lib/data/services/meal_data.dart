@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:yam_snap/data/meal_model.dart';
+import 'package:yam_snap/domain/models/meal_model.dart';
 
 class MealDataService {
   static const String _boxName = 'meals';
@@ -18,7 +18,7 @@ class MealDataService {
     return _box!.values.toList();
   }
 
-  static List<Meal> getMealsForDate(DateTime date) {
+  List<Meal> getMealsForDate(DateTime date) {
     final allMeals = getAllMeals();
     return allMeals.where((meal) {
       return meal.date.year == date.year &&
@@ -27,16 +27,16 @@ class MealDataService {
     }).toList();
   }
 
-  static Future<void> addMeal(Meal meal) async {
+  Future<void> addMeal(Meal meal) async {
     if (_box == null) {
       throw Exception(
         'MealDataService not initialized. Call initialize() first.',
       );
     }
-    await _box!.add(meal);
+    await _box?.add(meal);
   }
 
-  static Future<void> close() async {
+  Future<void> close() async {
     await _box?.close();
   }
 }

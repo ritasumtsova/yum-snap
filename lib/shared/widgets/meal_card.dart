@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:yam_snap/data/meal_model.dart';
+import 'package:yam_snap/domain/models/meal_model.dart';
 
 class MealCard extends StatelessWidget {
   const MealCard({super.key, required this.meal});
@@ -27,7 +27,7 @@ class MealCard extends StatelessWidget {
                   child: Image.file(File(meal.imagePath), fit: BoxFit.cover),
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

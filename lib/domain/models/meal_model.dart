@@ -54,6 +54,21 @@ class Meal extends HiveObject {
     };
   }
 
+  factory Meal.fromFormState(
+    String title,
+    int calories,
+    String ingredients,
+    String imagePath,
+  ) {
+    return Meal(
+      title: title,
+      calories: calories,
+      date: DateTime.now(),
+      imagePath: imagePath,
+      ingredients: ingredients,
+    );
+  }
+
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
       title: json['title'] as String,
@@ -62,30 +77,5 @@ class Meal extends HiveObject {
       imagePath: json['imagePath'] as String,
       ingredients: json['ingredients'] as String,
     );
-  }
-
-  @override
-  String toString() {
-    return 'Meal(title: $title, calories: $calories, date: $date, imagePath: $imagePath, ingredients: $ingredients)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Meal &&
-        other.title == title &&
-        other.calories == calories &&
-        other.date == date &&
-        other.imagePath == imagePath &&
-        other.ingredients == ingredients;
-  }
-
-  @override
-  int get hashCode {
-    return title.hashCode ^
-        calories.hashCode ^
-        date.hashCode ^
-        imagePath.hashCode ^
-        ingredients.hashCode;
   }
 }

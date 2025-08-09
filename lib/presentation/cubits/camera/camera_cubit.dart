@@ -25,7 +25,7 @@ class CameraCubit extends Cubit<CameraState> {
         enableAudio: false,
       );
 
-      await _controller!.initialize();
+      await _controller?.initialize();
 
       emit(CameraReady(controller: _controller!, flashMode: FlashMode.off));
     } catch (e) {
@@ -42,7 +42,7 @@ class CameraCubit extends Cubit<CameraState> {
           ? FlashMode.torch
           : FlashMode.off;
 
-      await _controller!.setFlashMode(newMode);
+      await _controller?.setFlashMode(newMode);
       emit(CameraReady(controller: _controller!, flashMode: newMode));
     }
   }
@@ -51,10 +51,12 @@ class CameraCubit extends Cubit<CameraState> {
     try {
       if (_controller == null || !_controller!.value.isInitialized) return null;
 
-      final image = await _controller!.takePicture();
+      final image = await _controller?.takePicture();
       final directory = await getTemporaryDirectory();
       final imagePath = join(directory.path, '${DateTime.now()}.png');
-      await image.saveTo(imagePath);
+      await image?.saveTo(imagePath);
+
+      emit(CameraPictureTaken(imagePath));
 
       return imagePath;
     } catch (e) {
