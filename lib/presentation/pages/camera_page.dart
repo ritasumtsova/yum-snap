@@ -2,7 +2,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yam_snap/presentation/cubits/camera/camera_cubit.dart';
-import 'package:yam_snap/presentation/pages/home_page.dart';
 import 'package:yam_snap/presentation/pages/new_meal_page.dart';
 
 class CameraPage extends StatefulWidget {
