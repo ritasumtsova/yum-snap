@@ -7,6 +7,6 @@ class AddMeal {
   AddMeal(this._mealDataService);
 
   Future<void> call(Meal meal) async {
-    await _mealDataService.addMeal(meal.date, meal);
+    await _mealDataService.addMeal(meal);
   }
 }

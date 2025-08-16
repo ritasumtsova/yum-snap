@@ -22,9 +22,10 @@ class MealDataService {
     return meals!.cast<Meal>();
   }
 
-  Future<void> addMeal(DateTime date, Meal meal) async {
+  Future<void> addMeal(Meal meal) async {
     if (_box == null) throw Exception("Box not initialized");
 
+    final date = DateTime.now();
     final key = _dateKey(date);
     final meals = _box!.get(key, defaultValue: <Meal>[])!.cast<Meal>();
     meals.add(meal);

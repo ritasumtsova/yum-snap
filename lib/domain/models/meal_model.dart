@@ -10,9 +10,6 @@ class Meal extends HiveObject {
   @HiveField(2)
   final int calories;
 
-  @HiveField(3)
-  final DateTime date;
-
   @HiveField(4)
   final String imagePath;
 
@@ -22,7 +19,6 @@ class Meal extends HiveObject {
   Meal({
     required this.title,
     required this.calories,
-    required this.date,
     required this.imagePath,
     required this.ingredients,
   });
@@ -31,14 +27,12 @@ class Meal extends HiveObject {
     String? id,
     String? title,
     int? calories,
-    DateTime? date,
     String? imagePath,
     String? ingredients,
   }) {
     return Meal(
       title: title ?? this.title,
       calories: calories ?? this.calories,
-      date: date ?? this.date,
       imagePath: imagePath ?? this.imagePath,
       ingredients: ingredients ?? this.ingredients,
     );
@@ -48,7 +42,6 @@ class Meal extends HiveObject {
     return {
       'title': title,
       'calories': calories,
-      'date': date.toIso8601String(),
       'imagePath': imagePath,
       'ingredients': ingredients,
     };
@@ -63,7 +56,6 @@ class Meal extends HiveObject {
     return Meal(
       title: title,
       calories: calories,
-      date: DateTime.now(),
       imagePath: imagePath,
       ingredients: ingredients,
     );
@@ -73,7 +65,6 @@ class Meal extends HiveObject {
     return Meal(
       title: json['title'] as String,
       calories: json['calories'] as int,
-      date: DateTime.parse(json['date'] as String),
       imagePath: json['imagePath'] as String,
       ingredients: json['ingredients'] as String,
     );
