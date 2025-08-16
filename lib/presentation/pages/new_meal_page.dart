@@ -103,7 +103,7 @@ class _AddNewMealPageState extends State<AddNewMealPage> {
 
                                     context.read<MealCubit>().addMeal(meal);
 
-                                    if (meal.isInBox && mounted) {
+                                    if (mounted) {
                                       context.read<MealFormCubit>().reset();
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
