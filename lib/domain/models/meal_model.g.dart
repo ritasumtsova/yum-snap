@@ -19,7 +19,6 @@ class MealAdapter extends TypeAdapter<Meal> {
     return Meal(
       title: fields[1] as String,
       calories: fields[2] as int,
-      date: fields[3] as DateTime,
       imagePath: fields[4] as String,
       ingredients: fields[5] as String,
     );
@@ -28,13 +27,11 @@ class MealAdapter extends TypeAdapter<Meal> {
   @override
   void write(BinaryWriter writer, Meal obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(1)
       ..write(obj.title)
       ..writeByte(2)
       ..write(obj.calories)
-      ..writeByte(3)
-      ..write(obj.date)
       ..writeByte(4)
       ..write(obj.imagePath)
       ..writeByte(5)
