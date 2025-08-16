@@ -16,94 +16,116 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final PageController _pageController = PageController(initialPage: 10000);
+  int currentPage = 10000;
+
   @override
   void initState() {
     super.initState();
+
     final selectedDate = context.read<SelectedDateCubit>().state;
     context.read<MealCubit>().loadMealsForDate(selectedDate);
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocListener<SelectedDateCubit, DateTime>(
-      listener: (context, selectedDate) {
-        context.read<MealCubit>().loadMealsForDate(selectedDate);
-      },
-      child: BlocBuilder<SelectedDateCubit, DateTime>(
-        builder: (context, selectedDate) {
-          final formattedDate = DateFormat.MMMMd().format(selectedDate);
-          final selectedDateCubit = context.read<SelectedDateCubit>();
+    final selectedDateCubit = context.read<SelectedDateCubit>();
 
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(formattedDate),
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => selectedDateCubit.getPrevDay(),
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward),
-                  onPressed: () => selectedDateCubit.getNextDay(),
-                ),
-              ],
-            ),
-            body: SafeArea(
-              top: false,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onHorizontalDragEnd: (details) {
-                  if (details.primaryVelocity! > 0) {
-                    selectedDateCubit.getPrevDay();
-                  }
-                  if (details.primaryVelocity! < 0) {
-                    selectedDateCubit.getNextDay();
-                  }
-                },
-                child: BlocBuilder<MealCubit, MealState>(
-                  builder: (context, state) {
-                    if (state is MealLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is MealLoaded) {
-                      final meals = state.meals;
-                      return meals.isEmpty
-                          ? const NoMeals()
-                          : ListView.builder(
-                              padding: const EdgeInsets.all(16),
-                              itemCount: meals.length,
-                              itemBuilder: (context, index) {
-                                return MealCard(meal: meals[index]);
-                              },
-                            );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              shape: const CircleBorder(),
-              backgroundColor: Colors.black,
-              onPressed: () async {
-                final hasPermission =
-                    await CameraPermissionHandler.checkAndRequestPermission(
-                      context,
-                    );
+    return Scaffold(
+      appBar: AppBar(
+        title: BlocBuilder<SelectedDateCubit, DateTime>(
+          builder: (context, date) {
+            final formattedDate = DateFormat('dd MMMM yyyy').format(date);
+            return Text(formattedDate);
+          },
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            _pageController.previousPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.ease,
+            );
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_forward),
+            onPressed: () {
+              _pageController.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.ease,
+              );
+            },
+          ),
+        ],
+      ),
+      body: SafeArea(
+        top: false,
+        child: PageView.builder(
+          controller: _pageController,
+          onPageChanged: (index) {
+            final diff = index - currentPage;
 
-                if (hasPermission == true && mounted) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const CameraPage()),
-                  );
+            if (diff > 0) {
+              selectedDateCubit.getNextDay();
+            } else if (diff < 0) {
+              selectedDateCubit.getPrevDay();
+            }
+
+            final selectedDate = context.read<SelectedDateCubit>().state;
+            context.read<MealCubit>().loadMealsForDate(selectedDate);
+
+            currentPage = index;
+          },
+          itemBuilder: (context, index) {
+            return BlocBuilder<MealCubit, MealState>(
+              builder: (context, state) {
+                if (state is MealLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is MealLoaded) {
+                  final meals = state.meals;
+                  return meals.isEmpty
+                      ? const NoMeals()
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: meals.length,
+                          itemBuilder: (context, index) {
+                            return MealCard(meal: meals[index]);
+                          },
+                        );
+                } else {
+                  return const SizedBox();
                 }
               },
-              tooltip: 'Add new meal',
-              child: const Icon(Icons.add, color: Colors.white),
-            ),
-          );
+            );
+          },
+        ),
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        backgroundColor: Colors.black,
+        onPressed: () async {
+          final hasPermission =
+              await CameraPermissionHandler.checkAndRequestPermission(context);
+
+          if (hasPermission == true && mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const CameraPage()),
+            );
+          }
         },
+        tooltip: 'Add new meal',
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
