@@ -49,35 +49,38 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            body: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onHorizontalDragEnd: (details) {
-                if (details.primaryVelocity! > 0) {
-                  selectedDateCubit.getPrevDay();
-                }
-                if (details.primaryVelocity! < 0) {
-                  selectedDateCubit.getNextDay();
-                }
-              },
-              child: BlocBuilder<MealCubit, MealState>(
-                builder: (context, state) {
-                  if (state is MealLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is MealLoaded) {
-                    final meals = state.meals;
-                    return meals.isEmpty
-                        ? const NoMeals()
-                        : ListView.builder(
-                            padding: const EdgeInsets.all(16),
-                            itemCount: meals.length,
-                            itemBuilder: (context, index) {
-                              return MealCard(meal: meals[index]);
-                            },
-                          );
-                  } else {
-                    return const SizedBox();
+            body: SafeArea(
+              top: false,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onHorizontalDragEnd: (details) {
+                  if (details.primaryVelocity! > 0) {
+                    selectedDateCubit.getPrevDay();
+                  }
+                  if (details.primaryVelocity! < 0) {
+                    selectedDateCubit.getNextDay();
                   }
                 },
+                child: BlocBuilder<MealCubit, MealState>(
+                  builder: (context, state) {
+                    if (state is MealLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is MealLoaded) {
+                      final meals = state.meals;
+                      return meals.isEmpty
+                          ? const NoMeals()
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(16),
+                              itemCount: meals.length,
+                              itemBuilder: (context, index) {
+                                return MealCard(meal: meals[index]);
+                              },
+                            );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
               ),
             ),
             floatingActionButton: FloatingActionButton(
